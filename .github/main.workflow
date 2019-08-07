@@ -27,3 +27,13 @@ action "docker://ubuntu:latest" {
   uses = "docker://ubuntu:latest"
   args = "env"
 }
+
+workflow "Check Suite #1" {
+  on = "check_suite"
+  resolves = ["docker://ubuntu:latest-1"]
+}
+
+action "docker://ubuntu:latest-1" {
+  uses = "docker://ubuntu:latest"
+  args = "env"
+}
