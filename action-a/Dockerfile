@@ -1,4 +1,4 @@
-FROM debian:9.5-slim
+FROM docker:dind
 
 LABEL "com.github.actions.name"="Hello World"
 LABEL "com.github.actions.description"="Write arguments to the standard output"
