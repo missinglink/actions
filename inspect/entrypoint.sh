@@ -19,8 +19,11 @@ df -h
 # mounts
 lsblk -f
 
-# memory
+# memory summary
 free -m
 
-# CPU
-cat /proc/cpu_info
+# Memory info
+cat /proc/meminfo
+
+# CPU info
+cat /proc/cpuinfo
