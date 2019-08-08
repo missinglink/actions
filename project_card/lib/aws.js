@@ -4,12 +4,14 @@ const AWS = require('aws-sdk')
 // no AWS_ACCESS_KEY_ID was provided
 if (_.get(process.env, 'AWS_ACCESS_KEY_ID', '') === '') {
   console.error(`missing env var: AWS_ACCESS_KEY_ID`)
+  console.error(`you must add 'secrets = ["AWS_ACCESS_KEY_ID", AWS_SECRET_ACCESS_KEY"]' to your action`)
   process.exit(1)
 }
 
 // no AWS_SECRET_ACCESS_KEY was provided
 if (_.get(process.env, 'AWS_SECRET_ACCESS_KEY', '') === '') {
   console.error(`missing env var: AWS_SECRET_ACCESS_KEY`)
+  console.error(`you must add 'secrets = ["AWS_ACCESS_KEY_ID", AWS_SECRET_ACCESS_KEY"]' to your action`)
   process.exit(1)
 }
 
