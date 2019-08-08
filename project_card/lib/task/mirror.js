@@ -44,7 +44,8 @@ async function upload (filePath, bucket, key) {
   var s3obj = new AWS.S3({ params: { Bucket: bucket, Key: key } })
 
   // create a gzip stream for s3
-  const gzipStream = fs.createReadStream(filePath).pipe(zlib.createGzip())
+  // const gzipStream = fs.createReadStream(filePath).pipe(zlib.createGzip())
+  const gzipStream = fs.createReadStream(filePath)
 
   // upload the file to s3
   return s3obj.upload({ Body: gzipStream })
