@@ -31,7 +31,8 @@ const action = _.get(event, 'action', '')
 // various card actions
 switch (action) {
   case 'created':
-    created(event)
+  case 'edited':
+    modified(event)
     break
   default:
     console.error(`unsupported event action: ${action}`)
@@ -78,11 +79,11 @@ async function messageTypeHead (event, message) {
   console.error(res.toJSON())
 
   // regardless of HEAD errors, archive this card
-  const gh = await archive(event.project_card)
+  const gh = await archive(event.project_card).catch(err => { throw err })
   console.error(gh)
 }
 
-async function created (event) {
+async function modified (event) {
   // no project_card object available
   if (_.get(event, 'project_card', '') === '') {
     console.error(`missing event property: project_card`)
