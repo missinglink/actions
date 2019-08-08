@@ -30,4 +30,4 @@ async function modified (event) {
   }
 }
 
-module.exports.modified = modified
+module.exports = modified
