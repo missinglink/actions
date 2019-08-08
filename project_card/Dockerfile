@@ -21,4 +21,5 @@ ADD package.json /package.json
 RUN npm install
 
 ADD entrypoint.js /entrypoint.js
-ENTRYPOINT ["/entrypoint.js"]
+ENTRYPOINT ["node"]
+CMD ["/entrypoint.js"]
