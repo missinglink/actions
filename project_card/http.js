@@ -35,7 +35,7 @@ async function download (uri, path) {
       .use(throttle.plugin())
 
     // handle stream events
-    stream.on('close', () => resolve(res))
+    stream.on('close', () => resolve(res.toJSON()))
     stream.on('error', (e) => reject(e))
 
     // pipe the streams together
