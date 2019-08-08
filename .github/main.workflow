@@ -95,7 +95,7 @@ workflow "public" {
 
 workflow "pull_request" {
   on = "pull_request"
-  resolves = ["env"]
+  resolves = []
 }
 
 workflow "pull_request_review_comment" {
