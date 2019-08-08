@@ -3,6 +3,8 @@ const Octokit = require('@octokit/rest')
 const octokit = new Octokit()
 const head = require('./head')
 
+console.error(process.env)
+
 // PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 // HOSTNAME=6b4d09078c0c
 // GITHUB_ACTION=env
@@ -65,14 +67,14 @@ async function created () {
       process.exit(78)
     }
 
-    const res = await head(message.uri)
+    const res = await head(message.uri).catch(err => { throw err })
     console.error(res.toJSON())
 
     // regardless of HEAD errors, archive this card
     const gh = await octokit.projects.updateCard({
       card_id: _.get(event, 'project_card.id', ''),
       archived: true
-    })
+    }).catch(err => { throw err })
     console.error(gh)
   } else {
     console.error(`unsupported message type: ${message.type}`)
