@@ -50,6 +50,9 @@ async function download (uri, path) {
         .redirects(5)
         .use(throttle.plugin())
         .on('response', (response) => { res = response })
+        .on('progress', (event) => {
+          console.log('download', event)
+        })
         .pipe(stream)
     } catch (e) {
       reject(e)
