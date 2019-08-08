@@ -28,11 +28,16 @@ async function download (uri, path) {
     // create write stream
     const stream = fs.createWriteStream(path)
 
+    // a variable to store the response message
+    // (for things like status code and headers)
+    let res
+
     // make an HTTP GET request
-    const res = request
+    request
       .get(uri)
       .redirects(5)
       .use(throttle.plugin())
+      .on('response', (response) => { res = response })
 
     // handle stream events
     stream.on('close', () => resolve(res.toJSON()))
