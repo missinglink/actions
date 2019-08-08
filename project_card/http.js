@@ -32,19 +32,17 @@ async function download (uri, path) {
     // (for things like status code and headers)
     let res
 
+    // handle stream events
+    stream.on('close', () => resolve(res.toJSON()))
+    stream.on('error', (e) => reject(e))
+
     // make an HTTP GET request
     request
       .get(uri)
       .redirects(5)
       .use(throttle.plugin())
       .on('response', (response) => { res = response })
-
-    // handle stream events
-    stream.on('close', () => resolve(res.toJSON()))
-    stream.on('error', (e) => reject(e))
-
-    // pipe the streams together
-    res.pipe(stream)
+      .pipe(stream)
   })
 }
 
