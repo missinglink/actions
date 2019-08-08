@@ -2,7 +2,7 @@ FROM ubuntu:latest
 
 # apt packages
 RUN apt-get update && \
-  apt-get install -y git-core && \
+  apt-get install -y git-core curl && \
   rm -rf /var/lib/apt/lists/*
 
 # configure git
