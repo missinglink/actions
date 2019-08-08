@@ -2,8 +2,8 @@ const fs = require('fs')
 const zlib = require('zlib')
 const _ = require('lodash')
 const http = require('../http')
-const archive = require('../archive')
-const AWS = require('./aws')
+// const archive = require('../archive')
+const AWS = require('../aws')
 
 const tmpPath = '/tmp/mydownload.file'
 
