@@ -1,0 +1,8 @@
+{
+  "task": "mirror",
+  "uri": "http://example.com",
+  "s3": {
+    "bucket": "missinglink.tmp",
+    "key": "index.html"
+  }
+}

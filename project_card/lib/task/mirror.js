@@ -1,9 +1,8 @@
 const fs = require('fs')
-const zlib = require('zlib')
 const _ = require('lodash')
 const http = require('../http')
-// const archive = require('../archive')
-const AWS = require('../aws')
+const archive = require('../archive')
+const s3 = require('../s3')
 
 const tmpPath = '/tmp/mydownload.file'
 
@@ -27,30 +26,23 @@ async function task (event, msg) {
   const res = await http.download(msg.uri, tmpPath).catch(err => { throw err })
   console.error(res.toJSON())
 
-  // stat file on disk
-  console.error(fs.statSync(tmpPath))
-
   // upload the file to s3
-  const aw = await upload(tmpPath, msg.s3.bucket, msg.s3.key).catch(err => { throw err })
+  const aw = await s3.upload(
+    fs.createReadStream(tmpPath),
+    { Bucket: msg.s3.bucket, Key: msg.s3.key }
+  ).catch(err => { throw err })
   console.error(aw)
 
-  // // regardless of errors, archive this card
-  // const gh = await archive(event.project_card).catch(err => { throw err })
-  // console.error(gh)
-}
+  // upload the request metadata to s3
+  const aw2 = await s3.upload(
+    JSON.stringify(res.toJSON(), null, 2),
+    { Bucket: msg.s3.bucket, Key: msg.s3.key + '.meta' }
+  ).catch(err => { throw err })
+  console.error(aw2)
 
-async function upload (filePath, bucket, key) {
-  // create an s3 object
-  var s3obj = new AWS.S3({ params: { Bucket: bucket, Key: key } })
-
-  // create a gzip stream for s3
-  // const gzipStream = fs.createReadStream(filePath).pipe(zlib.createGzip())
-  const gzipStream = fs.createReadStream(filePath)
-
-  // upload the file to s3
-  return s3obj.upload({ Body: gzipStream })
-    .on('httpUploadProgress', (evt) => { console.log('progress', evt) })
-    .promise()
+  // regardless of errors, archive this card
+  const gh = await archive(event.project_card).catch(err => { throw err })
+  console.error(gh)
 }
 
 module.exports = task
