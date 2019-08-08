@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@octokit/rest": "^16.28.7",
+    "aws-sdk": "^2.505.0",
     "lodash": "^4.17.15",
     "superagent": "^5.1.0",
     "superagent-throttle": "^1.0.1"
