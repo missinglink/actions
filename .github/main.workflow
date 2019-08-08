@@ -158,4 +158,5 @@ action "speedtest" {
 
 action "projectcard" {
   uses = "./project_card"
+  secrets = ["GITHUB_TOKEN"]
 }
