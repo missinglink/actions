@@ -2,4 +2,4 @@
 
 sh -c "echo $*"
 
-docker run --rm -it ubuntu:latest whoami
+docker run --rm ubuntu:latest whoami
