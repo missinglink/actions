@@ -34,8 +34,14 @@ if (_.get(process.env, 'GITHUB_EVENT_PATH', '') === '') {
 const event = require(process.env.GITHUB_EVENT_PATH)
 const action = _.get(event, 'action', '')
 
-// handle new card creation
-if (action === 'created') {
+// handle card actions
+switch (action) {
+  case 'created':
+    created()
+    break
+}
+
+async function created () {
   const note = _.get(event, 'project_card.note', '')
 
   // try to parse JSON body
@@ -59,16 +65,15 @@ if (action === 'created') {
       process.exit(78)
     }
 
-    head(message.uri, (err, res) => {
-      console.error(err)
-      console.error(res)
-    })
+    const res = await head(message.uri)
+    console.error(res.toJSON())
 
-    // regardless of errors, archive this card
-    octokit.projects.updateCard({
+    // regardless of HEAD errors, archive this card
+    const gh = await octokit.projects.updateCard({
       card_id: _.get(event, 'project_card.id', ''),
       archived: true
     })
+    console.error(gh)
   } else {
     console.error(`unsupported message type: ${message.type}`)
     process.exit(78)
