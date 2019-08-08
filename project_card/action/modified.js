@@ -5,7 +5,7 @@ const tasks = {
   get: require('../lib/task/get')
 }
 
-async function modified (event) {
+function modified (event) {
   // no project_card object available
   if (_.get(event, 'project_card', '') === '') {
     console.error(`missing event property: project_card`)
