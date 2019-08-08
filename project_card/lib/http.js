@@ -36,7 +36,7 @@ async function download (uri, path) {
 
       // handle stream events
       stream.on('close', () => {
-        let ret = res
+        let ret = { toJSON: () => {} }
         if (typeof _.get(res, 'toJSON', '') === 'function') {
           ret = { toJSON: () => res.toJSON() }
         }
