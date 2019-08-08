@@ -25,24 +25,28 @@ async function head (uri) {
 
 async function download (uri, path) {
   return new Promise((resolve, reject) => {
-    // create write stream
-    const stream = fs.createWriteStream(path)
+    try {
+      // create write stream
+      const stream = fs.createWriteStream(path)
 
-    // a variable to store the response message
-    // (for things like status code and headers)
-    let res
+      // a variable to store the response message
+      // (for things like status code and headers)
+      let res
 
-    // handle stream events
-    stream.on('close', () => resolve(res.toJSON()))
-    stream.on('error', (e) => reject(e))
+      // handle stream events
+      stream.on('close', () => resolve(res.toJSON()))
+      stream.on('error', (e) => reject(e))
 
-    // make an HTTP GET request
-    request
-      .get(uri)
-      .redirects(5)
-      .use(throttle.plugin())
-      .on('response', (response) => { res = response })
-      .pipe(stream)
+      // make an HTTP GET request
+      request
+        .get(uri)
+        .redirects(5)
+        .use(throttle.plugin())
+        .on('response', (response) => { res = response })
+        .pipe(stream)
+    } catch (e) {
+      reject(e)
+    }
   })
 }
 
