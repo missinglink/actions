@@ -20,6 +20,6 @@ ENV NODE_PATH="/usr/local/lib/node_modules:$NODE_PATH"
 ADD package.json /package.json
 RUN npm install
 
-ADD entrypoint.js /entrypoint.js
+ADD *.js /
 ENTRYPOINT ["node"]
 CMD ["/entrypoint.js"]
