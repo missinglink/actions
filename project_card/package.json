@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@octokit/rest": "^16.28.7"
+    "@octokit/rest": "^16.28.7",
+    "lodash": "^4.17.15"
   }
 }
