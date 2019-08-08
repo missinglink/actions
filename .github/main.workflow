@@ -23,7 +23,7 @@ action "ENV" {
   args = "env"
 }
 
-workflow "Push #1" {
+workflow "Push #2" {
   on = "push"
   resolves = ["action-a"]
 }
