@@ -18,6 +18,11 @@ workflow "Check Suite #1" {
   resolves = ["ENV"]
 }
 
+workflow "Cron #1" {
+  on = "schedule(*/15 * * * *)"
+  resolves = ["ENV"]
+}
+
 action "ENV" {
   uses = "docker://ubuntu:latest"
   args = "env"
