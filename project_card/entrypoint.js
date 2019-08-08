@@ -115,7 +115,9 @@ async function modified (event) {
   // handle message types
   switch (message.type) {
     case 'head':
-      // messageTypeHead(event, message)
+      messageTypeHead(event, message)
+      break
+    case 'download':
       messageTypeDownload(event, message)
       break
     default:
