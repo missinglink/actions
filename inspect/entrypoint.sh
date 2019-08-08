@@ -7,9 +7,6 @@ uname -a
 # OS
 cat /etc/issue
 
-# user
-whoami
-
 # users
 cat /etc/passwd
 
@@ -27,3 +24,9 @@ cat /proc/meminfo
 
 # CPU info
 cat /proc/cpuinfo
+
+# environment
+env
+
+# user
+whoami

@@ -150,5 +150,4 @@ action "env" {
 
 action "inspect" {
   uses = "./inspect"
-  args = "env"
 }
