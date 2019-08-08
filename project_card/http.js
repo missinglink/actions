@@ -1,4 +1,5 @@
 const fs = require('fs')
+const _ = require('lodash')
 const request = require('superagent')
 const Throttle = require('superagent-throttle')
 
@@ -34,7 +35,13 @@ async function download (uri, path) {
       let res
 
       // handle stream events
-      stream.on('end', () => resolve((res && typeof res.toJSON === 'function') ? res.toJSON() : res))
+      stream.on('end', () => {
+        let ret = res
+        if (typeof _.get(res, 'toJSON', '') === 'function') {
+          ret = res.toJSON()
+        }
+        resolve(ret)
+      })
       stream.on('error', (e) => reject(e))
 
       // make an HTTP GET request
