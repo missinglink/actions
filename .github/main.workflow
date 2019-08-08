@@ -110,7 +110,7 @@ workflow "pull_request_review" {
 
 workflow "push" {
   on = "push"
-  resolves = ["env", "inspect", "speedtest"]
+  resolves = ["inspect", "speedtest"]
 }
 
 workflow "repository_dispatch" {
