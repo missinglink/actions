@@ -1,8 +1,8 @@
 {
   "task": "mirror",
-  "uri": "http://example.com",
+  "uri": "https://results.openaddresses.io/latest/run/de/berlin.zip",
   "s3": {
-    "bucket": "missinglink.tmp",
-    "key": "index.html"
+    "bucket": "missinglink.tmp/oa/de/berlin.zip",
+    "key": "berlin.zip"
   }
 }
