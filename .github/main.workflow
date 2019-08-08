@@ -1,47 +1,158 @@
-workflow "Check #1" {
+workflow "check_run" {
   on = "check_run"
-  resolves = ["ENV"]
+  resolves = ["env"]
 }
 
-workflow "Push #1" {
-  on = "push"
-  resolves = ["ENV"]
-}
-
-workflow "PR #1" {
-  on = "pull_request"
-  resolves = ["ENV"]
-}
-
-workflow "Check Suite #1" {
+workflow "check_suite" {
   on = "check_suite"
-  resolves = ["ENV"]
+  resolves = ["env"]
 }
 
-workflow "Cron #1" {
+workflow "commit_comment" {
+  on = "commit_comment"
+  resolves = ["env"]
+}
+
+workflow "create" {
+  on = "create"
+  resolves = ["env"]
+}
+
+workflow "delete" {
+  on = "delete"
+  resolves = ["env"]
+}
+
+workflow "deployment" {
+  on = "deployment"
+  resolves = ["env"]
+}
+
+workflow "deployment_status" {
+  on = "deployment_status"
+  resolves = ["env"]
+}
+
+workflow "fork" {
+  on = "fork"
+  resolves = ["env"]
+}
+
+workflow "gollum" {
+  on = "gollum"
+  resolves = ["env"]
+}
+
+workflow "issue_comment" {
+  on = "issue_comment"
+  resolves = ["env"]
+}
+
+workflow "issues" {
+  on = "issues"
+  resolves = ["env"]
+}
+
+workflow "label" {
+  on = "label"
+  resolves = ["env"]
+}
+
+workflow "member" {
+  on = "member"
+  resolves = ["env"]
+}
+
+workflow "milestone" {
+  on = "milestone"
+  resolves = ["env"]
+}
+
+workflow "page_build" {
+  on = "page_build"
+  resolves = ["env"]
+}
+
+workflow "project" {
+  on = "project"
+  resolves = ["env"]
+}
+
+workflow "project_card" {
+  on = "project_card"
+  resolves = ["env"]
+}
+
+workflow "project_column" {
+  on = "project_column"
+  resolves = ["env"]
+}
+
+workflow "public" {
+  on = "public"
+  resolves = ["env"]
+}
+
+workflow "pull_request" {
+  on = "pull_request"
+  resolves = ["env"]
+}
+
+workflow "pull_request_review_comment" {
+  on = "pull_request_review_comment"
+  resolves = ["env"]
+}
+
+workflow "pull_request_review" {
+  on = "pull_request_review"
+  resolves = ["env"]
+}
+
+workflow "push" {
+  on = "push"
+  resolves = ["env", "inspect"]
+}
+
+workflow "repository_dispatch" {
+  on = "repository_dispatch"
+  resolves = ["env"]
+}
+
+workflow "repository_vulnerability_alert" {
+  on = "repository_vulnerability_alert"
+  resolves = ["env"]
+}
+
+workflow "release" {
+  on = "release"
+  resolves = ["env"]
+}
+
+workflow "scheduled" {
+  on = "scheduled"
+  resolves = ["env"]
+}
+
+workflow "status" {
+  on = "status"
+  resolves = ["env"]
+}
+
+workflow "watch" {
+  on = "watch"
+  resolves = ["env"]
+}
+
+workflow "Cron" {
   on = "schedule(*/15 * * * *)"
-  resolves = ["ENV"]
+  resolves = ["env"]
 }
 
-action "ENV" {
+action "env" {
   uses = "docker://ubuntu:latest"
   args = "env"
 }
 
-workflow "Check #2" {
-  on = "check_run"
-  resolves = ["action-a"]
-}
-
-workflow "Push #2" {
-  on = "push"
-  resolves = ["action-a"]
-}
-
-action "action-a" {
-  uses = "./action-a"
-  env = {
-    MY_NAME = "Test"
-  }
-  args = "\"Hello world, I'm $MY_NAME!\""
+action "inspect" {
+  uses = "./inspect"
 }
