@@ -34,7 +34,7 @@ async function download (uri, path) {
       let res
 
       // handle stream events
-      stream.on('close', () => resolve(res))
+      stream.on('end', () => resolve((res && typeof res.toJSON === 'function') ? res.toJSON() : res))
       stream.on('error', (e) => reject(e))
 
       // make an HTTP GET request
@@ -42,10 +42,7 @@ async function download (uri, path) {
         .get(uri)
         .redirects(5)
         .use(throttle.plugin())
-        .on('response', (response) => {
-          console.error('response', response)
-          res = response
-        })
+        .on('response', (response) => { res = response })
         .pipe(stream)
     } catch (e) {
       reject(e)
