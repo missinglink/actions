@@ -1,9 +1,11 @@
 const _ = require('lodash')
-const Octokit = require('@octokit/rest')
-const octokit = new Octokit()
 const head = require('./head')
 
-console.error(process.env)
+// not a 'project_card' event
+if (_.get(process.env, 'GITHUB_EVENT_NAME', '') !== 'project_card') {
+  console.error(`unsupported event: ${process.env.GITHUB_EVENT_NAME}`)
+  process.exit(78)
+}
 
 // PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 // HOSTNAME=6b4d09078c0c
@@ -20,11 +22,14 @@ console.error(process.env)
 // HOME=/github/home
 // GITHUB_REF=refs/heads/master
 
-// not a 'project_card' event
-if (_.get(process.env, 'GITHUB_EVENT_NAME', '') !== 'project_card') {
-  console.error(`unsupported event: ${process.env.GITHUB_EVENT_NAME}`)
-  process.exit(78)
+// no GITHUB_TOKEN was provided
+if (_.get(process.env, 'GITHUB_TOKEN', '') === '') {
+  console.error(`missing env var: GITHUB_TOKEN`)
+  process.exit(1)
 }
+
+const Octokit = require('@octokit/rest')
+const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 
 // no GITHUB_EVENT_PATH was provided
 if (_.get(process.env, 'GITHUB_EVENT_PATH', '') === '') {
