@@ -63,20 +63,14 @@ if (action === 'created') {
       console.error(err)
       console.error(res)
     })
+
+    // regardless of errors, archive this card
+    octokit.projects.updateCard({
+      card_id: _.get(event, 'project_card.id', ''),
+      archived: true
+    })
   } else {
     console.error(`unsupported message type: ${message.type}`)
     process.exit(78)
   }
 }
-
-// // Compare: https://developer.github.com/v3/repos/#list-organization-repositories
-// octokit.repos.listForOrg({
-//   org: 'octokit',
-//   type: 'public'
-// }).then(({ data }) => {
-//   console.error(data)
-// })
-
-// octokit.projects.getCard({
-//   card_id
-// })
