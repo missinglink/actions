@@ -7,27 +7,14 @@ if (_.get(process.env, 'GITHUB_EVENT_NAME', '') !== 'project_card') {
   process.exit(78)
 }
 
-// PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-// HOSTNAME=6b4d09078c0c
-// GITHUB_ACTION=env
-// GITHUB_ACTOR=missinglink
-// GITHUB_BASE_REF=
-// GITHUB_EVENT_NAME=project_card
-// GITHUB_EVENT_PATH=/github/workflow/event.json
-// GITHUB_HEAD_REF=
-// GITHUB_REPOSITORY=missinglink/actions
-// GITHUB_SHA=27dd22d2b39cd25c05f9d68d21f7dc913724c662
-// GITHUB_WORKFLOW=project_card
-// GITHUB_WORKSPACE=/github/workspace
-// HOME=/github/home
-// GITHUB_REF=refs/heads/master
-
 // no GITHUB_TOKEN was provided
 if (_.get(process.env, 'GITHUB_TOKEN', '') === '') {
   console.error(`missing env var: GITHUB_TOKEN`)
+  console.error(`you must add 'secrets = ["GITHUB_TOKEN"]' to your action`)
   process.exit(1)
 }
 
+// authenticate with the github API
 const Octokit = require('@octokit/rest')
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 
@@ -41,15 +28,18 @@ if (_.get(process.env, 'GITHUB_EVENT_PATH', '') === '') {
 const event = require(process.env.GITHUB_EVENT_PATH)
 const action = _.get(event, 'action', '')
 
-// handle card actions
+// various card actions
 switch (action) {
   case 'created':
-    created()
+    created(event)
     break
+  default:
+    console.error(`unsupported event action: ${action}`)
+    process.exit(78)
 }
 
-async function created () {
-  const note = _.get(event, 'project_card.note', '')
+function jsonMessage (card) {
+  const note = _.get(card, 'note', '')
 
   // try to parse JSON body
   let message = {}
@@ -64,25 +54,51 @@ async function created () {
     process.exit(78)
   }
 
-  // head request
-  if (message.type === 'head') {
-    // basic schema validation
-    if (!_.isString(message.uri)) {
-      console.error(`missing field: uri`)
-      process.exit(78)
-    }
+  return message
+}
 
-    const res = await head(message.uri).catch(err => { throw err })
-    console.error(res.toJSON())
+// archive card
+async function archive (card) {
+  const gh = await octokit.projects.updateCard({
+    card_id: card.id,
+    archived: true
+  }).catch(err => { throw err })
+  return gh
+}
 
-    // regardless of HEAD errors, archive this card
-    const gh = await octokit.projects.updateCard({
-      card_id: _.get(event, 'project_card.id', ''),
-      archived: true
-    }).catch(err => { throw err })
-    console.error(gh)
-  } else {
-    console.error(`unsupported message type: ${message.type}`)
+// HEAD action
+async function messageTypeHead (event, message) {
+  // basic schema validation
+  if (!_.isString(message.uri)) {
+    console.error(`missing field: uri`)
     process.exit(78)
+  }
+
+  const res = await head(message.uri).catch(err => { throw err })
+  console.error(res.toJSON())
+
+  // regardless of HEAD errors, archive this card
+  const gh = await archive(event.project_card)
+  console.error(gh)
+}
+
+async function created (event) {
+  // no project_card object available
+  if (_.get(event, 'project_card', '') === '') {
+    console.error(`missing event property: project_card`)
+    process.exit(1)
+  }
+
+  // parse the card body
+  let message = jsonMessage(event.project_card)
+
+  // handle message types
+  switch (message.type) {
+    case 'head':
+      messageTypeHead(event, message)
+      break
+    default:
+      console.error(`unsupported message type: ${message.type}`)
+      process.exit(78)
   }
 }
