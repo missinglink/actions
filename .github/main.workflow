@@ -80,7 +80,7 @@ workflow "project" {
 
 workflow "project_card" {
   on = "project_card"
-  resolves = ["env", "projectcard"]
+  resolves = ["projectcard"]
 }
 
 workflow "project_column" {
@@ -140,7 +140,7 @@ workflow "watch" {
 
 workflow "Cron" {
   on = "schedule(*/15 * * * *)"
-  resolves = ["env"]
+  resolves = []
 }
 
 action "env" {
