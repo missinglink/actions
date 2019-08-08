@@ -22,3 +22,16 @@ action "ENV" {
   uses = "docker://ubuntu:latest"
   args = "env"
 }
+
+workflow "Push #1" {
+  on = "push"
+  resolves = ["action-a"]
+}
+
+action "action-a" {
+  uses = "./action-a"
+  env = {
+    MY_NAME = "Test"
+  }
+  args = "\"Hello world, I'm $MY_NAME!\""
+}
