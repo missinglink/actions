@@ -128,11 +128,6 @@ workflow "release" {
   resolves = ["env"]
 }
 
-workflow "scheduled" {
-  on = "scheduled"
-  resolves = ["env"]
-}
-
 workflow "status" {
   on = "status"
   resolves = ["env"]
