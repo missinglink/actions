@@ -1,4 +1,4 @@
-const AWS = require('../aws')
+const AWS = require('./aws')
 
 async function upload (body, params) {
   // create an s3 object
