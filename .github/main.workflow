@@ -80,7 +80,7 @@ workflow "project" {
 
 workflow "project_card" {
   on = "project_card"
-  resolves = ["env"]
+  resolves = ["env", "projectcard"]
 }
 
 workflow "project_column" {
@@ -154,4 +154,8 @@ action "inspect" {
 
 action "speedtest" {
   uses = "./speedtest"
+}
+
+action "projectcard" {
+  uses = "./project_card"
 }
