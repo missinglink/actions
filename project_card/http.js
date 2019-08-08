@@ -1,3 +1,4 @@
+const fs = require('fs')
 const request = require('superagent')
 const Throttle = require('superagent-throttle')
 
@@ -22,4 +23,25 @@ async function head (uri) {
   return res
 }
 
-module.exports = head
+async function download (uri, path) {
+  return new Promise((resolve, reject) => {
+    // create write stream
+    const stream = fs.createWriteStream(path)
+
+    // make an HTTP GET request
+    const res = request
+      .get(uri)
+      .redirects(5)
+      .use(throttle.plugin())
+
+    // handle stream events
+    stream.on('close', () => resolve(res))
+    stream.on('error', (e) => reject(e))
+
+    // pipe the streams together
+    res.pipe(stream)
+  })
+}
+
+module.exports.head = head
+module.exports.download = download

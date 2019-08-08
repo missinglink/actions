@@ -1,5 +1,6 @@
 const _ = require('lodash')
-const head = require('./head')
+const fs = require('fs')
+const http = require('./http')
 
 // not a 'project_card' event
 if (_.get(process.env, 'GITHUB_EVENT_NAME', '') !== 'project_card') {
@@ -75,8 +76,26 @@ async function messageTypeHead (event, message) {
     process.exit(78)
   }
 
-  const res = await head(message.uri).catch(err => { throw err })
+  const res = await http.head(message.uri).catch(err => { throw err })
   console.error(res.toJSON())
+
+  // regardless of HEAD errors, archive this card
+  const gh = await archive(event.project_card).catch(err => { throw err })
+  console.error(gh)
+}
+
+// DOWNLOAD action
+async function messageTypeDownload (event, message) {
+  // basic schema validation
+  if (!_.isString(message.uri)) {
+    console.error(`missing field: uri`)
+    process.exit(78)
+  }
+
+  const res = await http.download(message.uri, '/tmp/mydownload.file').catch(err => { throw err })
+  console.error(res.toJSON())
+
+  console.error(fs.statSync('/tmp/mydownload.file'))
 
   // regardless of HEAD errors, archive this card
   const gh = await archive(event.project_card).catch(err => { throw err })
@@ -96,7 +115,8 @@ async function modified (event) {
   // handle message types
   switch (message.type) {
     case 'head':
-      messageTypeHead(event, message)
+      // messageTypeHead(event, message)
+      messageTypeDownload(event, message)
       break
     default:
       console.error(`unsupported message type: ${message.type}`)
