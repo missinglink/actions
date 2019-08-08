@@ -59,8 +59,10 @@ if (action === 'created') {
       process.exit(78)
     }
 
-    const res = head(message.uri)
-    console.error(res)
+    head(message.uri, (err, res) => {
+      console.error(err)
+      console.error(res)
+    })
   } else {
     console.error(`unsupported message type: ${message.type}`)
     process.exit(78)

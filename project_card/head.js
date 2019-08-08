@@ -9,17 +9,18 @@ let throttle = new Throttle({
   concurrent: 100 // how many requests can be sent concurrently
 })
 
-async function head (uri) {
+async function head (uri, cb) {
   // make an HTTP HEAD request
-  const res = await request
+  request
     .head(uri)
     .redirects(5)
     .use(throttle.plugin())
+    .end(cb)
 
   // handle HTTP errors
-  if (res.status >= 400) { throw new Error(`HTTP ${res.status}`) }
+  // if (res.status >= 400) { throw new Error(`HTTP ${res.status}`) }
 
-  return res
+  // return res
 }
 
 module.exports = head
